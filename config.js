@@ -53,7 +53,7 @@ function loadConfig() {
         PaymanConfig.api.headers['x-paygent-wf-mcp-provider-token'] = window.ENV.PAYMAN_PROVIDER_TOKEN || PaymanConfig.api.headers['x-paygent-wf-mcp-provider-token'];
         
         PaymanConfig.workflowName = window.ENV.PAYMAN_WORKFLOW_NAME || PaymanConfig.workflowName;
-        PaymanConfig.workflowVersion = parseInt(window.ENV.PAYMAN_WORKFLOW_VERSION || '1', 10);
+        PaymanConfig.workflowVersion = parseInt(window.ENV.PAYMAN_WORKFLOW_VERSION, 10);
         PaymanConfig.stage = window.ENV.PAYMAN_STAGE || PaymanConfig.stage;
         
         PaymanConfig.sessionParams.id = window.ENV.PAYMAN_SESSION_ID || PaymanConfig.sessionParams.id;
