@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payman Chat - Floating Mode (Easiest!)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #f3f4f6;
+            color: #667eea;
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Content Area */
+        .content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-card h1 {
+            font-size: 32px;
+            color: #1f2937;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-card p {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #15803d;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 16px;
+        }
+
+        .demo-instruction {
+            background: #f9fafb;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 24px;
+        }
+
+        .demo-instruction h3 {
+            font-size: 18px;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .demo-instruction p {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">💬 Payman Chat</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Custom HTML Mode</a></li>
+                <li><a href="floating.html" class="active">Floating Mode</a></li>
+                <li><a href="floating-customized.html">Customized Floating</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="content-card">
+            <h1>Floating Mode Demo</h1>
+            <span class="feature-badge">Easy Setup • Recommended</span>
+            <p>
+                This demo showcases the <strong>Floating Mode</strong> - the easiest way to add Payman Chat to your website! 
+                The widget automatically creates a beautiful chat button and window with zero HTML required.
+            </p>
+            <p>
+                Just include the script, call one initialization function, and you're done! The floating chat widget 
+                will appear automatically with a professional design that works on all devices.
+            </p>
+            
+            <div class="demo-instruction">
+                <h3>Try it out!</h3>
+                <p>Look for the chat button in the bottom-right corner - it was automatically created by the widget!</p>
+                <p>Click it to open the chat interface. No custom HTML or CSS needed - everything is handled for you.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Environment Loader (for local development only) -->
+    <script src="env-loader.js"></script>
+    
+    <!-- Configuration -->
+    <script src="config.js"></script>
+
+    <!-- Widget JavaScript -->
+    <script>
+        // Initialize the widget in floating mode after environment is loaded
+        function initializeWidget() {
+            if (typeof PaymanChatWidget !== 'undefined' && window.PaymanConfig) {
+                PaymanChatWidget.init({
+                    mode: 'floating', // Floating mode - creates button automatically!
+                    config: window.PaymanConfig,
+                    // Floating mode options
+                    floatingOptions: {
+                        buttonPosition: 'bottom-right',
+                        buttonSize: 'md',
+                        headerTitle: 'AI Assistant',
+                        headerSubtitle: 'Online • Ready to help',
+                        headerAvatar: '🤖',
+                        windowWidth: 400,
+                        windowHeight: 600,
+                        defaultOpen: false,
+                        showNotificationBadge: false,
+                    }
+                });
+            }
+        }
+
+        // Wait for environment to load (in local dev) or initialize immediately (in production)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            window.addEventListener('env-loaded', initializeWidget);
+        } else {
+            window.addEventListener('load', initializeWidget);
+        }
+    </script>
+
+    <!-- Widget files -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ahmadzraiq/payman-chat-widget@main/widget-dist/payman-ask-sdk.css">
+    <script src="https://cdn.jsdelivr.net/gh/ahmadzraiq/payman-chat-widget@main/widget-dist/payman-chat-widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payman Chat - Custom HTML Mode Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #f3f4f6;
+            color: #667eea;
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Content Area */
+        .content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-card h1 {
+            font-size: 32px;
+            color: #1f2937;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-card p {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            background: #eff6ff;
+            color: #3b82f6;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 16px;
+        }
+
+        .demo-instruction {
+            background: #f9fafb;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 24px;
+        }
+
+        .demo-instruction h3 {
+            font-size: 18px;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .demo-instruction p {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        /* Floating Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+        }
+
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .chat-button svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .chat-button .close-icon {
+            display: none;
+        }
+
+        .chat-button.active .chat-icon {
+            display: none;
+        }
+
+        .chat-button.active .close-icon {
+            display: block;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .chat-header-text h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .chat-header-text p {
+            font-size: 12px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .minimize-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .minimize-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .minimize-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .chat-body {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        #payman-chat {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .chatbot-container {
+                bottom: 16px;
+                right: 16px;
+            }
+
+            .chat-window {
+                width: calc(100vw - 32px);
+                height: calc(100vh - 120px);
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">💬 Payman Chat</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Custom HTML Mode</a></li>
+                <li><a href="floating.html">Floating Mode</a></li>
+                <li><a href="floating-customized.html">Customized Floating</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="content-card">
+            <h1>Custom HTML Mode Demo</h1>
+            <span class="feature-badge">Advanced Integration</span>
+            <p>
+                This demo showcases the <strong>Custom HTML Mode</strong> where you have complete control over the chat interface design. 
+                You can create your own button, window, and customize every aspect of the chat experience.
+            </p>
+            <p>
+                Perfect for developers who want to integrate the chat seamlessly into their existing design system 
+                and maintain full control over the UI/UX.
+            </p>
+            
+            <div class="demo-instruction">
+                <h3>Try it out!</h3>
+                <p>Click the chat button in the bottom-right corner to open the custom-designed chat interface.</p>
+                <p>This example demonstrates how you can build your own chat UI while leveraging the Payman Chat SDK for functionality.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Chatbot Widget -->
+    <div class="chatbot-container">
+        <!-- Chat Button -->
+        <button class="chat-button" id="chatToggleBtn" aria-label="Open chat">
+            <svg class="chat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+            </svg>
+            <svg class="close-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        <!-- Chat Window -->
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar">🤖</div>
+                    <div class="chat-header-text">
+                        <h3>AI Assistant</h3>
+                        <p>Online • Ready to help</p>
+                    </div>
+                </div>
+                <button class="minimize-button" id="minimizeBtn" aria-label="Minimize chat">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="chat-body">
+                <div id="payman-chat"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Environment Loader (for local development only) -->
+    <script src="env-loader.js"></script>
+    
+    <!-- Configuration -->
+    <script src="config.js"></script>
+
+    <!-- Widget JavaScript -->
+    <script>
+        // Toggle chat window
+        const toggleBtn = document.getElementById('chatToggleBtn');
+        const chatWindow = document.getElementById('chatWindow');
+        const minimizeBtn = document.getElementById('minimizeBtn');
+        
+        function toggleChat() {
+            toggleBtn.classList.toggle('active');
+            chatWindow.classList.toggle('active');
+        }
+        
+        toggleBtn.addEventListener('click', toggleChat);
+        minimizeBtn.addEventListener('click', toggleChat);
+
+        // Initialize the widget after environment is loaded
+        function initializeWidget() {
+            if (typeof PaymanChatWidget !== 'undefined' && window.PaymanConfig) {
+                PaymanChatWidget.init({
+                    containerId: 'payman-chat',
+                    config: window.PaymanConfig
+                });
+            }
+        }
+
+        // Wait for environment to load (in local dev) or initialize immediately (in production)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            window.addEventListener('env-loaded', initializeWidget);
+        } else {
+            window.addEventListener('load', initializeWidget);
+        }
+    </script>
+
+    <!-- Widget files -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ahmadzraiq/payman-chat-widget@main/widget-dist/payman-ask-sdk.css">
+    <script src="https://cdn.jsdelivr.net/gh/ahmadzraiq/payman-chat-widget@main/widget-dist/payman-chat-widget.js"></script>
+</body>
+</html>
